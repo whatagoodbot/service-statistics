@@ -3,7 +3,7 @@ import { playsDb, reactionsDb } from '../models/index.js'
 export default async (options, meta) => {
   if (options.service !== process.env.npm_package_name) return
 
-  const period = options?.query?.search ?? 'thismonth'
+  const period = options?.arguments ?? 'thismonth'
   let filter = 'user'
   let statType = options.name.substring(2)
   if (options.name.indexOf('room') > -1) {
