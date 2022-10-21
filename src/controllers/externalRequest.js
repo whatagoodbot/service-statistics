@@ -1,8 +1,8 @@
 import { playsDb, reactionsDb } from '../models/index.js'
 
-export default async (options, meta) => {
+export default async (options) => {
   if (options.service !== process.env.npm_package_name) return
-
+  console.log(options)
   const period = options?.arguments ?? 'thismonth'
   let filter = 'user'
   let statType = options.name.substring(2)
@@ -17,25 +17,26 @@ export default async (options, meta) => {
   }
   switch (statType) {
     case 'spins':
-      response.stats = await getSpins(period, filter, meta.room, meta.user.id)
+      response.stats = await getSpins(period, filter, options.room.slug, options.user.id)
       break
     case 'leaderboard':
-      response.leaderboard = await getLeaderboard(period, meta.room)
+      response.leaderboard = await getLeaderboard(period, options.room.slug)
       break
     case 'mostpopular':
-      response.stats = await getPopular(period, filter, meta.room, meta.user.id)
+      response.stats = await getPopular(period, filter, options.room.slug, options.user.id)
       break
     case 'stars':
     case 'dopes':
     case 'nopes':
-      response.stats = await getReactions(period, filter, meta.room, meta.user.id, statType)
+      response.stats = await getReactions(period, filter, options.room.slug, options.user.id, statType)
       break
     case 'stats':
-      response.stats = await getAll(period, filter, meta.room, meta.user.id)
+      response.stats = await getAll(period, filter, options.room.slug, options.user.id)
       break
   }
   response.period = period
   response.filter = filter
+  console.log(response)
   return [{
     topic: 'reportStats',
     payload: response
