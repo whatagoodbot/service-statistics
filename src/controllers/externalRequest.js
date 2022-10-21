@@ -2,7 +2,6 @@ import { playsDb, reactionsDb } from '../models/index.js'
 
 export default async (options) => {
   if (options.service !== process.env.npm_package_name) return
-  console.log(options)
   const period = options?.arguments ?? 'thismonth'
   let filter = 'user'
   let statType = options.name.substring(2)
@@ -36,7 +35,6 @@ export default async (options) => {
   }
   response.period = period
   response.filter = filter
-  console.log(response)
   return [{
     topic: 'reportStats',
     payload: response
