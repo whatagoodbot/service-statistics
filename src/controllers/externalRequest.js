@@ -10,6 +10,8 @@ export default async (options) => {
     statType = options.name.substring(4)
   } else if (options.name.indexOf('leaderboard') > -1) {
     statType = options.name
+  } else if (options.name.indexOf('first') > -1) {
+    statType = options.name
   }
   const response = {
     type: statType
