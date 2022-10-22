@@ -15,6 +15,9 @@ export default async (options) => {
     type: statType
   }
   switch (statType) {
+    case 'first':
+      response.firstPlay = await getFirstPlay(options.nowPlaying.id)
+      break
     case 'spins':
       response.stats = await getSpins(period, filter, options.room.slug, options.user.id)
       break
@@ -73,4 +76,13 @@ const getAll = async (period, filter, room, userId) => {
 
 const getLeaderboard = async (period, room) => {
   return await reactionsDb.getReactionTable(period, room)
+}
+
+const getFirstPlay = async songId => {
+  const firstPlay = await playsDb.get(songId)
+  return {
+    date: firstPlay.createdAt,
+    user: firstPlay.user,
+    room: firstPlay.room
+  }
 }
