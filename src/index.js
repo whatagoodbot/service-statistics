@@ -1,9 +1,10 @@
-import broker from 'message-broker'
+import broker from '@whatagoodbot/mqtt'
 import controllers from './controllers/index.js'
 import { logger } from './utils/logging.js'
 import { metrics } from './utils/metrics.js'
 import { performance } from 'perf_hooks'
 import { delay } from './utils/timing.js'
+import { startServer } from './libs/grpc.js'
 
 const topicPrefix = `${process.env.NODE_ENV}/`
 
@@ -26,6 +27,8 @@ if (broker.client.connected) {
 } else {
   broker.client.on('connect', subscribe)
 }
+
+startServer()
 
 broker.client.on('error', (err) => {
   logger.error({
@@ -52,6 +55,7 @@ broker.client.on('message', async (topic, data) => {
         ...processedResponse.payload
       })
       if (validatedResponse.errors) throw { message: validatedResponse.errors } // eslint-disable-line
+      if (process.env.FULLDEBUG) return
       broker.client.publish(`${topicPrefix}${processedResponse.topic}`, JSON.stringify(validatedResponse))
       await delay(250)
     }
@@ -68,6 +72,7 @@ broker.client.on('message', async (topic, data) => {
       ...requestPayload
     })
     metrics.count('error', { topicName })
+    if (process.env.FULLDEBUG) return
     broker.client.publish(`${topicPrefix}responseRead`, JSON.stringify(validatedResponse))
   }
 })
