@@ -2,7 +2,7 @@ const tableName = 'userPlays'
 
 export default (knex) => {
   return {
-    add: async (user, room, artist, title, songId, provider, theme = null) => {
+    add: async (user, room, artist, title, songId, provider, theme = null, client) => {
       const results = await knex(tableName)
         .insert({
           user,
@@ -11,7 +11,8 @@ export default (knex) => {
           title,
           songId,
           provider,
-          theme
+          theme,
+          client
         })
       if (results.length > 0) return true
       return false
