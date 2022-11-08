@@ -40,7 +40,6 @@ export default async (options) => {
   }
   response.period = period
   response.filter = filter
-  console.log(response)
   return [{
     topic: 'reportStats',
     payload: response
