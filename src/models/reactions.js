@@ -64,7 +64,7 @@ export default (knex) => {
         })
       const scores = {}
       results.forEach((result) => {
-        scores[result.songId] = scores[result.songId] || { titleArtist: `${result.artist}: ${result.title}`, score: 0 }
+        scores[result.songId] = scores[result.songId] || { titleArtist: `${result.artist}: ${result.title}`, score: 0, playedBy: result.user }
         switch (result.reaction) {
           case 'star':
             scores[result.songId].score += 2
