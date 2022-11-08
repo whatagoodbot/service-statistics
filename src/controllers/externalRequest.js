@@ -40,6 +40,7 @@ export default async (options) => {
   }
   response.period = period
   response.filter = filter
+  console.log(response)
   return [{
     topic: 'reportStats',
     payload: response
@@ -83,7 +84,7 @@ const getLeaderboard = async (period, room) => {
 const getFirstPlay = async songId => {
   const firstPlay = await playsDb.get(songId)
   return {
-    date: firstPlay.createdAt,
+    date: firstPlay.createdAt.toISOString(),
     user: firstPlay.user,
     room: firstPlay.room
   }
