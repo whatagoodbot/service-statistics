@@ -44,9 +44,9 @@ export default (knex) => {
         .orderBy('createdAt', 'desc')
         .first()
     },
-    get: async (songId, room) => {
+    getFirst: async (client, songId, room) => {
       return await knex(tableName)
-        .where({ songId })
+        .where({ songId, client })
         .modify((queryBuilder) => {
           if (room) {
             queryBuilder.where({ room })
