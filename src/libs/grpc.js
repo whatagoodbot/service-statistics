@@ -14,8 +14,7 @@ export const getCurrentRoomTheme = room => {
 
 export const startServer = () => {
   server.addService(themeResults.ThemeResults.service, { getThemeWinner })
-  server.bindAsync('0.0.0.0:50051', serverCreds, () => {
-    console.log('GRPC server running')
+  server.bindAsync('0.0.0.0:50052', serverCreds, () => {
     server.start()
   })
 }
