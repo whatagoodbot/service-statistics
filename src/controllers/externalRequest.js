@@ -83,7 +83,7 @@ const getLeaderboard = async (period, room) => {
 const getFirstPlay = async (songId, filter, room, client) => {
   const firstPlay = await playsDb.getFirst(client, songId, filter === 'room' ? room : null)
   return {
-    date: firstPlay.createdAt.toLocaleDateString('en-us', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }),
+    date: firstPlay.createdAt.toLocaleDateString('en-gb', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }),
     user: firstPlay.user,
     room: firstPlay.room
   }
