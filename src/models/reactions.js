@@ -78,7 +78,7 @@ export default (knex) => {
         }
       })
       const table = Object.keys(scores).map((songId) => {
-        return { titleArtist: scores[songId].titleArtist, score: scores[songId].score, playedBy: scores[songId].user }
+        return { titleArtist: scores[songId].titleArtist, score: scores[songId].score, playedBy: scores[songId].playedBy }
       })
       let orderedTable = table.sort((a, b) => {
         return b.score - a.score
