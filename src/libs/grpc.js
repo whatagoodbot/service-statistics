@@ -1,5 +1,5 @@
 import { server, serverCreds, clientCreds, themes, themeResults } from '@whatagoodbot/rpc'
-import { getThemeWinner } from '../controllers/getThemeResults.js'
+import { getThemeWinner, getThemeLeaderboard, getCurrentThemeLeaderboard } from '../controllers/getThemeResults.js'
 import { logger } from '../utils/logging.js'
 
 const themeService = new themes.Themes(`${process.env.THEME_SERVICE}:50051`, clientCreds)
@@ -14,7 +14,7 @@ export const getCurrentRoomTheme = room => {
 }
 
 export const startServer = () => {
-  server.addService(themeResults.ThemeResults.service, { getThemeWinner })
+  server.addService(themeResults.ThemeResults.service, { getThemeWinner, getThemeLeaderboard, getCurrentThemeLeaderboard })
   server.bindAsync('0.0.0.0:50051', serverCreds, () => {
     server.start()
   })
