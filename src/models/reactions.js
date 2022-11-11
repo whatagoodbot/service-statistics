@@ -107,7 +107,7 @@ export default (knex) => {
           }
         })
     },
-    getReactionTable: async (period, room, theme) => {
+    getReactionTable: async (period, room, theme, themes) => {
       let endDate = new Date()
       let startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
       if (period === 'alltime') {
@@ -123,6 +123,8 @@ export default (knex) => {
         .modify((queryBuilder) => {
           if (theme) {
             queryBuilder.where('userPlays.theme', theme)
+          } else if (themes) {
+            queryBuilder.whereIn('userPlays.theme', themes)
           }
         })
       const scores = {}
