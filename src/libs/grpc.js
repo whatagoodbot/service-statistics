@@ -15,7 +15,7 @@ export const getCurrentRoomTheme = room => {
 
 export const startServer = () => {
   server.addService(themeResults.ThemeResults.service, { getThemeWinner })
-  server.bindAsync('0.0.0.0:50052', serverCreds, () => {
+  server.bindAsync('0.0.0.0:50051', serverCreds, () => {
     server.start()
   })
 }
