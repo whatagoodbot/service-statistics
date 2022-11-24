@@ -123,6 +123,8 @@ export default (knex) => {
         .modify((queryBuilder) => {
           if (theme) {
             queryBuilder.where('userPlays.theme', theme)
+          } else if (themes) {
+            queryBuilder.whereIn('userPlays.theme', themes)
           }
         })
         .modify((queryBuilder) => {
