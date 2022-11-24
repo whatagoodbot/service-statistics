@@ -1,4 +1,4 @@
-
+// TODO should abstract a lot of the functionality out to a lib and just get the DB responses here
 const tableName = 'playReactions'
 const tableNamePlays = 'userPlays'
 
@@ -107,7 +107,7 @@ export default (knex) => {
           }
         })
     },
-    getReactionTable: async (period, room, theme, themes) => {
+    getReactionTable: async (period, room, theme, user) => {
       let endDate = new Date()
       let startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
       if (period === 'alltime') {
@@ -116,38 +116,20 @@ export default (knex) => {
         startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, 1)
         endDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1)
       }
-      const results = await knex(tableName)
+      return await knex(tableName)
         .join(tableNamePlays, { 'playReactions.play': 'userPlays.id' })
         .whereBetween('playReactions.createdAt', [startDate, endDate])
         .andWhere('userPlays.room', room)
         .modify((queryBuilder) => {
           if (theme) {
             queryBuilder.where('userPlays.theme', theme)
-          } else if (themes) {
-            queryBuilder.whereIn('userPlays.theme', themes)
           }
         })
-      const scores = {}
-      results.forEach((result) => {
-        scores[result.user] = scores[result.user] || { score: 0 }
-        switch (result.reaction) {
-          case 'star':
-            scores[result.user].score += 2
-            break
-          case 'dope':
-            scores[result.user].score++
-            break
-          case 'nope':
-            scores[result.user].score--
-            break
-        }
-      })
-      const table = Object.keys(scores).map((user) => {
-        return { user, score: scores[user].score }
-      })
-      return table.sort((a, b) => {
-        return b.score - a.score
-      })
+        .modify((queryBuilder) => {
+          if (user) {
+            queryBuilder.where('userPlays.user', user)
+          }
+        })
     }
   }
 }

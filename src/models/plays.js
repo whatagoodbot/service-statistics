@@ -54,6 +54,17 @@ export default (knex) => {
         })
         .orderBy('createdAt', 'asc')
         .first()
+    },
+    getFirstText: async (client, title, artist, room) => {
+      return await knex(tableName)
+        .where({ title, artist, client })
+        .modify((queryBuilder) => {
+          if (room) {
+            queryBuilder.where({ room })
+          }
+        })
+        .orderBy('createdAt', 'asc')
+        .first()
     }
   }
 }
