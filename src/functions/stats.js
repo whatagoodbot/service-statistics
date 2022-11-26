@@ -36,16 +36,22 @@ export default async payload => {
 
   const messageStart = `${await intro(payload.period)} ${(payload.filter === 'user') ? `@${payload.user.nickname}` : strings.statsRoom}`
   let message
+  console.log(payload.client.richText)
   if (payload.client.richText) {
-    message = `<table>
+    /*
+<table>
       <tr>
-        <td colspan="4">${messageStart} ${strings.statsHas}</td>
+        <td>${messageStart} ${strings.statsHas}</td>
       </tr>
+    </table>
+    */
+    message = `
+    <table>
       <tr>
-        <td><strong>Spins ${strings.spinsIcon}</strong></td>
-        <td><strong>Dopes ${strings.dopesIcon}</strong></td>
-        <td><strong>Nopes ${strings.nopesIcon}</strong></td>
-        <td><strong>Bookmarks ${strings.starsIcon}</strong></td>
+        <td><strong>Spins ${strings.spinsIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Dopes ${strings.dopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Nopes ${strings.nopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Bookmarks ${strings.starsIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
       </tr>
       <tr>
         <td>${spins}</td>
@@ -53,8 +59,10 @@ export default async payload => {
         <td>${nopes}</td>
         <td>${stars}</td>
       </tr>
+      </table>
+      <table>  
       <tr>
-        <td colspan="4">${popular}</td>
+        <td>${popular}</td>
       </tr>
     </table>`
   } else {
