@@ -33,16 +33,21 @@ export default async payload => {
   const leaderboard = await getLeaderboard(payload.period, payload.room.id, payload.theme)
   if (leaderboard.length > 0) {
     if (payload.client.richText) {
-      const tableHeader = `<table>
+      /*
+      <table>
       <tr>
-        <td colspan="5">${messageStart}</td>
+        <td>${messageStart}</td>
       </tr>
+    </table>
+    */
+      const tableHeader = `
+    <table>
       <tr>
-        <td><strong></strong></td>
+        <td>#</td>
         <td><strong>User</strong></td>
-        <td><strong>Dopes ${strings.dopesIcon}</strong></td>
-        <td><strong>Nopes ${strings.nopesIcon}</strong></td>
-        <td><strong>Bookmarks ${strings.starsIcon}</strong></td>
+        <td><strong>Dopes ${strings.dopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Nopes ${strings.nopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Bookmarks ${strings.starsIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td><strong>Total Score</strong></td>
       </tr>`
       const tableResults = []
@@ -50,7 +55,7 @@ export default async payload => {
         tableResults.push(`
           <tr>
             <td>${positionIcons[record]}</td>
-            <td>${leaderboard[record].user.name}</td>
+            <td>@${leaderboard[record].user.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>${leaderboard[record].dopes}</td>
             <td>${leaderboard[record].nopes}</td>
             <td>${leaderboard[record].stars}</td>
