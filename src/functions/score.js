@@ -16,7 +16,7 @@ export default async (payload, allRooms) => {
     'leaderboardMid'
   ])
 
-  const score = await getScore(payload.period, payload.room.id, payload.user.id)
+  const score = await getScore(payload.period, allRooms ? null : payload.room.id, payload.user.id)
   const messageStart = `${await intro(payload.period)} ${(payload.filter === 'user') ? `@${payload.user.nickname}` : strings.statsRoom}`
   const roomFinish = allRooms ? await clients.strings.get('scoreAllRooms') : await clients.strings.get('scoreThisRoom')
   metrics.trackExecution(functionName, 'function', performance.now() - startTime, true)

@@ -30,7 +30,7 @@ export default async payload => {
     '5️⃣ '
   ]
 
-  const leaderboard = await getLeaderboard(payload.period, payload.room.id, payload.theme)
+  const leaderboard = await getLeaderboard(payload.period, payload.room.id, null, payload.theme)
   if (leaderboard.length > 0) {
     if (payload.client.richText) {
       /*
@@ -111,7 +111,7 @@ export default async payload => {
   }
 }
 
-export const getLeaderboard = async (period, roomId, theme, user) => {
+export const getLeaderboard = async (period, roomId, user, theme) => {
   const startTime = performance.now()
   const functionName = 'getLeaderboard'
   logger.debug({ event: functionName })
