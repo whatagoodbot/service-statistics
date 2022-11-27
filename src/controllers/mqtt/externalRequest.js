@@ -7,6 +7,7 @@ import stats from '../../functions/stats.js'
 import leaderboard from '../../functions/leaderboard.js'
 import mostpopular from '../../functions/popular.js'
 import score from '../../functions/score.js'
+import scoreall from '../../functions/scoreall.js'
 
 const statisticCommands = {
   first,
@@ -17,7 +18,8 @@ const statisticCommands = {
   stats,
   leaderboard,
   mostpopular,
-  score
+  score,
+  scoreall
 }
 // TODO myfirsts to show a list of firsts a person has (thismonth, lastmonth & alltime)
 // TODO firsts leaderboard

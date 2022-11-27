@@ -4,7 +4,7 @@ import { clients } from '@whatagoodbot/rpc'
 import { getLeaderboard } from './leaderboard.js'
 import intro from '../libs/getIntro.js'
 
-export default async payload => {
+export default async (payload, allRooms) => {
   const startTime = performance.now()
   const functionName = 'nopes'
   logger.debug({ event: functionName })
@@ -16,27 +16,23 @@ export default async payload => {
     'leaderboardMid'
   ])
 
-  const leaderboard = await getLeaderboard(payload.period, payload.room.id, null, payload.user.id)
-  if (leaderboard) {
-    let score = 0
-    if (leaderboard.length > 0) {
-      score = leaderboard[0].score
+  const score = await getScore(payload.period, payload.room.id, payload.user.id)
+  const messageStart = `${await intro(payload.period)} ${(payload.filter === 'user') ? `@${payload.user.nickname}` : strings.statsRoom}`
+  const roomFinish = allRooms ? await clients.strings.get('scoreAllRooms') : await clients.strings.get('scoreThisRoom')
+  metrics.trackExecution(functionName, 'function', performance.now() - startTime, true)
+  return [{
+    topic: 'broadcast',
+    payload: {
+      message: `${messageStart} ${strings.statsHas} ${strings.leaderboardMid} ${score} ${roomFinish.value}`
     }
-    const messageStart = `${await intro(payload.period)} ${(payload.filter === 'user') ? `@${payload.user.nickname}` : strings.statsRoom}`
-    metrics.trackExecution(functionName, 'function', performance.now() - startTime, true)
-    return [{
-      topic: 'broadcast',
-      payload: {
-        message: `${messageStart} ${strings.statsHas} ${strings.leaderboardMid} ${score}`
-      }
-    }]
-  } else {
-    const string = await clients.strings.get('scoreNoData')
-    return [{
-      topic: 'broadcast',
-      payload: {
-        message: string.value
-      }
-    }]
+  }]
+}
+
+export const getScore = async (period, room, userId) => {
+  let score = 0
+  const leaderboard = await getLeaderboard(period, room, userId)
+  if (leaderboard?.length > 0) {
+    score = leaderboard[0].score
   }
+  return score
 }

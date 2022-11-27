@@ -2,6 +2,7 @@ import { performance } from 'perf_hooks'
 import { logger, metrics } from '@whatagoodbot/utilities'
 import { clients } from '@whatagoodbot/rpc'
 import { getSpins } from './spins.js'
+import { getScore } from './score.js'
 import { getPopular } from './popular.js'
 import getReactions from './reactions.js'
 import intro from '../libs/getIntro.js'
@@ -11,12 +12,14 @@ export default async payload => {
   const functionName = 'spins'
   logger.debug({ event: functionName })
   metrics.count(functionName)
-  const [spins, nopes, dopes, stars, popular, strings] = await Promise.all([
+  const [spins, nopes, dopes, stars, popular, score, scoreAll, strings] = await Promise.all([
     getSpins(payload.period, payload.filter, payload.room.id, payload.user.id),
     getReactions(payload.period, payload.filter, payload.room.id, payload.user.id, 'nope'),
     getReactions(payload.period, payload.filter, payload.room.id, payload.user.id, 'dope'),
     getReactions(payload.period, payload.filter, payload.room.id, payload.user.id, 'star'),
     getPopular(payload.period, payload.filter, payload.room.id, payload.user.id, payload.user.nickname),
+    getScore(payload.period, payload.room.id, payload.user.id),
+    getScore(payload.period, null, payload.user.id),
     clients.strings.getMany([
       'statsHas',
       'spinsOutro',
@@ -28,6 +31,7 @@ export default async payload => {
       'starsIcon',
       'dopesIcon',
       'nopesIcon',
+      'scoreIcon',
       'popularTrackIntro',
       'popularTrackScore',
       'leaderboardIntro'
@@ -36,7 +40,6 @@ export default async payload => {
 
   const messageStart = `${await intro(payload.period)} ${(payload.filter === 'user') ? `@${payload.user.nickname}` : strings.statsRoom}`
   let message
-  console.log(payload.client.richText)
   if (payload.client.richText) {
     /*
 <table>
@@ -52,12 +55,16 @@ export default async payload => {
         <td><strong>Dopes ${strings.dopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td><strong>Nopes ${strings.nopesIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td><strong>Bookmarks ${strings.starsIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Score Room ${strings.scoreIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><strong>Score All ${strings.scoreIcon}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
       </tr>
       <tr>
         <td>${spins}</td>
         <td>${dopes}</td>
         <td>${nopes}</td>
         <td>${stars}</td>
+        <td>${score}</td>
+        <td>${scoreAll}</td>
       </tr>
       </table>
       <table>  
