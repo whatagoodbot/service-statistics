@@ -125,7 +125,7 @@ export default (knex) => {
           }
         })
         .modify((queryBuilder) => {
-            if (theme) {
+          if (theme) {
             queryBuilder.where('userPlays.theme', theme)
           }
         })
