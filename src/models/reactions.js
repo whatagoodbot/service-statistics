@@ -119,9 +119,13 @@ export default (knex) => {
       return await knex(tableName)
         .join(tableNamePlays, { 'playReactions.play': 'userPlays.id' })
         .whereBetween('playReactions.createdAt', [startDate, endDate])
-        .andWhere('userPlays.room', room)
         .modify((queryBuilder) => {
-          if (theme) {
+          if (room) {
+            queryBuilder.where('userPlays.room', room)
+          }
+        })
+        .modify((queryBuilder) => {
+            if (theme) {
             queryBuilder.where('userPlays.theme', theme)
           }
         })
