@@ -1,6 +1,6 @@
 {
   "name": "service-statistics",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -41,7 +41,7 @@
     "standard": "^17.0.0"
   },
   "dependencies": {
-    "@whatagoodbot/mqtt": "^4.0.0",
+    "@whatagoodbot/mqtt": "^4.0.1",
     "@whatagoodbot/rpc": "^2.0.0",
     "@whatagoodbot/utilities": "^1.0.0",
     "knex": "^2.3.0",

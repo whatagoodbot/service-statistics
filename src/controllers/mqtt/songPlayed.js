@@ -11,7 +11,6 @@ export default async payload => {
 
   const reportedCurrentTheme = await clients.themes.get(payload.room.id)
   const currentTheme = reportedCurrentTheme.id > 0 ? reportedCurrentTheme.id : null
-  // if (!['_1_', '_2_', '_3_'].includes(payload.room.id))
-  playsDb.add(payload.nowPlaying.dj, payload.room.id, payload.nowPlaying.artist, payload.nowPlaying.title, payload.nowPlaying.id, payload.nowPlaying.provider, currentTheme, payload.client.name)
+  playsDb.add(payload.nowPlaying.dj, payload.room.id, payload.nowPlaying.artist, payload.nowPlaying.title, payload.nowPlaying.id, payload.nowPlaying.provider, currentTheme, payload.client.name, payload.nowPlaying.popularity)
   metrics.trackExecution(functionName, 'rpc', performance.now() - startTime, true)
 }
