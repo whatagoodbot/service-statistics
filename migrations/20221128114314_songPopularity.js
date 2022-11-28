@@ -8,7 +8,7 @@ export const up = (knex) => {
 
 export const down = (knex) => {
   return knex.schema
-  .alterTable('userPlays', table => {
-    table.dropColumn('popularity')
-  })
+    .alterTable('userPlays', table => {
+      table.dropColumn('popularity')
+    })
 }
