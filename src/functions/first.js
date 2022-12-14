@@ -18,8 +18,7 @@ export default async payload => {
       }
     }]
   }
-  const filter = (payload.command.indexOf('room') === -1) ? 'room' : 'user'
-  const firstPlay = await playsDb.getFirst(payload.client.name, payload.nowPlaying.id, filter === 'room' ? payload.room.id : null)
+  const firstPlay = await playsDb.getFirst(payload.client.name, payload.nowPlaying.id, payload.command.indexOf('room') > -1 ? payload.room.id : null)
   if (!firstPlay) {
     const noFirstPlay = await clients.strings.get('noFirstPlay')
     return [{
